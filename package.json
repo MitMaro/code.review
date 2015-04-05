@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "scripts": {
+    "eslint": "eslint .",
+    "jscs": "jscs ."
+  },
+  "devDependencies": {
+    "eslint": "^0.18.0",
+    "jscs": "^1.12.0"
+  }
+}
