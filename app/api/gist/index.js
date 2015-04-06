@@ -1,18 +1,8 @@
 "use strict";
 
 var Promise = require("bluebird");
-var nodegit = require("nodegit");
+var NodeGit = require("nodegit");
 var sprintf = require("sprintf-js").sprintf;
-
-var clone = nodegit.Clone.clone;
-
-var opts = {
-	remoteCallbacks: {
-		certificateCheck: function certificateCheck() {
-			return 1;
-		}
-	}
-};
 
 var Gist = function Gist(id) {
 	this._id = id;
@@ -23,11 +13,21 @@ var Gist = function Gist(id) {
 Gist.uri = sprintf.bind(sprintf, "https://gist.github.com/%s.git");
 
 Gist.prototype._download = function _download() {
-	return clone(this._uri, this._path, opts);
+	return NodeGit.Clone.clone(this._uri, this._path, {
+		remoteCallbacks: {
+			certificateCheck: function certificateCheck() {
+				return 1;
+			}
+		}
+	});
 };
 
 Gist.prototype._master = function _master() {
+	var self = this;
 	return this._download()
+	.catch(function openExistingRepo() {
+		return NodeGit.Repository.open(self._path);
+	})
 	.then(function getMasterCommit(repo) {
 		return repo.getReferenceCommit("master");
 	});
