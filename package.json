@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "mocha --recursive",
+    "eslint": "eslint .",
+    "jscs": "jscs ."
+  },
+  "dependencies": {
+    "bluebird": "^2.9.24",
+    "hapi": "^8.4.0",
+    "nodegit": "^0.3.3",
+    "sprintf-js": "^1.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.1",
+    "chai": "^2.2.0",
+    "eslint": "^0.18.0",
+    "jscs": "^1.12.0"
+  }
+}

@@ -1,0 +1,37 @@
+#%RAML 0.8
+---
+title: Code Review API
+baseUri: https://api.code.review/
+version: 0
+mediaType: application/vnd.api+json
+/{gistId}:
+    uriParameters:
+        gistId:
+            description: |
+                The ID of the Gist from GitHub
+    get:
+        description: |
+            Returns the Gist contents, any associated comments, and
+            metadata about the Gist.
+        responses:
+            200:
+                body:
+                    example: |
+                        {
+                            "id": "5ef3908f5b6728db2401",
+                            "links": {},
+                            "files": {
+                                "8e41912635bd67be01f134c481fbbea4e4b51535": {
+                                    "name": "hipchat_notify.py",
+                                    "contents": "..."
+                                },
+                                "6da3da040abeffa0f67903293fd1ecdbcd8f4820": {
+                                    "name": "post-build.groovy",
+                                    "contents": "..."
+                                },
+                                "537853fe05a2eca211c7e21d01ca193d40ea07ab": {
+                                    "name": "post-build.md",
+                                    "contents": "..."
+                                }
+                            }
+                        }
