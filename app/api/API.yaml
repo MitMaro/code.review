@@ -18,9 +18,7 @@ mediaType: application/vnd.api+json
                 body:
                     example: |
                         {
-                            "type": "gist",
                             "id": "5ef3908f5b6728db2401",
-                            "title": "Rudimentary Jenkins + HipChat integration",
                             "links": {},
                             "files": {
                                 "8e41912635bd67be01f134c481fbbea4e4b51535": {
