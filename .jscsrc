@@ -44,6 +44,7 @@
 	"disallowSpacesInsideParentheses": true,
 	"disallowTrailingComma": true,
 	"disallowTrailingWhitespace": "ignoreEmptyLines",
+	"excludeFiles": ["node_modules/**"],
 	"requireBlocksOnNewline": true,
 	"requireCamelCaseOrUpperCaseIdentifiers": true,
 	"requireCapitalizedConstructors": true,
