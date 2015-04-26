@@ -9,12 +9,17 @@
     "bluebird": "^2.9.24",
     "hapi": "^8.4.0",
     "nodegit": "^0.3.3",
+    "react": "^0.13.2",
     "sprintf-js": "^1.0.2"
   },
   "devDependencies": {
-    "mocha": "^2.2.1",
     "chai": "^2.2.0",
+    "ecstatic": "^0.7.4",
     "eslint": "^0.18.0",
-    "jscs": "^1.12.0"
+    "jscs": "^1.12.0",
+    "jsx-loader": "^0.13.1",
+    "mocha": "^2.2.1",
+    "webpack": "^1.8.9",
+    "html-webpack-plugin": "^1.3.0",
   }
 }
