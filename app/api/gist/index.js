@@ -1,16 +1,17 @@
-"use strict";
+'use strict';
 
-var Promise = require("bluebird");
-var NodeGit = require("nodegit");
-var sprintf = require("sprintf-js").sprintf;
+var Promise = require('bluebird');
+var NodeGit = require('nodegit');
+var sprintf = require('sprintf-js').sprintf;
 
 var Gist = function Gist(id) {
 	this._id = id;
-	this._path = sprintf("/tmp/%s", id);
+
+	this._path = sprintf('/tmp/%s', id);
 	this._uri = Gist.uri(id);
 };
 
-Gist.uri = sprintf.bind(sprintf, "https://gist.github.com/%s.git");
+Gist.uri = sprintf.bind(sprintf, 'https://gist.github.com/%s.git');
 
 Gist.prototype._download = function _download() {
 	return NodeGit.Clone.clone(this._uri, this._path, {
@@ -24,21 +25,23 @@ Gist.prototype._download = function _download() {
 
 Gist.prototype._master = function _master() {
 	var self = this;
+
 	return this._download()
 	.catch(function openExistingRepo() {
 		return NodeGit.Repository.open(self._path);
 	})
 	.then(function getMasterCommit(repo) {
-		return repo.getReferenceCommit("master");
+		return repo.getReferenceCommit('master');
 	});
 };
 
 Gist.prototype._getBlobs = function getBlobs(commit) {
 	return commit.getTree()
-	.then(function (tree) {
+	.then(function getTreeSuccess(tree) {
 		var entries = tree.entries();
 		var blobs = Object.create(null);
-		return Promise.map(entries, function (entry) {
+
+		return Promise.map(entries, function handlePromiseMap(entry) {
 			return entry.getBlob()
 			.then(function getBlobContent(blob) {
 				return blob.content();
@@ -58,6 +61,7 @@ Gist.prototype._getBlobs = function getBlobs(commit) {
 
 Gist.prototype.blobs = function blobs() {
 	var self = this;
+
 	return this._master()
 	.then(function getBlobsFromMaster(commit) {
 		return self._getBlobs(commit);

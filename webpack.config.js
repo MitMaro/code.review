@@ -1,3 +1,5 @@
+'use strict';
+
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -33,4 +35,4 @@ module.exports = {
 		extensions: ['', '.js', '.jsx']
 	},
 	devtool: 'inline-source-map'
-}
+};

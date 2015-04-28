@@ -32,6 +32,9 @@
 		"vars-on-top": 1,
 		"yoda": [1, "never", { "exceptRange": true }],
 		"no-undefined": 1,
-		"no-var": 1
+		"strict": [1, "global"],
+
+		"no-underscore-dangle": 0,
+		"quotes": 0
 	}
 }

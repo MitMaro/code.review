@@ -1,24 +1,19 @@
 {
+	"excludeFiles": [
+		"./node_modules/**",
+		"./build/**"
+	],
 	"disallowAnonymousFunctions": true,
-	"disallowCapitalizedComments": true,
-	"disallowCommaBeforeLineBreak": true,
-	"disallowDanglingUnderscores": {
-		"allExcept": ["_"]
-	},
 	"disallowEmptyBlocks": true,
 	"disallowMixedSpacesAndTabs": "smart",
 	"disallowMultipleLineBreaks": true,
 	"disallowMultipleSpaces": true,
 	"disallowMultipleVarDecl": true,
 	"disallowNewlineBeforeBlockStatements": true,
-	"disallowOperatorBeforeLineBreak": true,
 	"disallowQuotedKeysInObjects": "allButReserved",
 	"disallowSpaceAfterObjectKeys": true,
 	"disallowSpaceAfterPrefixUnaryOperators": true,
 	"disallowSpaceBeforePostfixUnaryOperators": true,
-	"disallowSpacesInAnonymousFunctionExpression":  {
-		"beforeOpeningRoundBrace": true
-	},
 	"disallowSpacesInCallExpression": true,
 	"disallowSpacesInConditionalExpression": {
 		"afterTest": true,
@@ -27,12 +22,6 @@
 		"beforeAlternate": false
 	},
 	"disallowSpacesInFunctionDeclaration": {
-		"beforeOpeningRoundBrace": true
-	},
-	"disallowSpacesInFunctionExpression": {
-		"beforeOpeningRoundBrace": true
-	},
-	"disallowSpacesInFunction": {
 		"beforeOpeningRoundBrace": true
 	},
 	"disallowSpacesInNamedFunctionExpression": {
@@ -57,11 +46,37 @@
 	"requireParenthesesAroundIIFE": true,
 	"requireSemicolons": true,
 	"requireSpaceAfterBinaryOperators": true,
-	"requireSpaceAfterKeywords": true,
-	"requireSpaceAfterKeywords": true,
+	"requireSpaceAfterKeywords": [
+		"do",
+		"for",
+		"if",
+		"else",
+		"switch",
+		"case",
+		"try",
+		"catch",
+		"void",
+		"while",
+		"with",
+		"return",
+		"typeof"
+	],
 	"requireSpaceBeforeBinaryOperators": true,
 	"requireSpaceBeforeBlockStatements": true,
-	"requireSpaceBeforeKeywords": true,
+	"requireSpaceBeforeKeywords": [
+		"do",
+		"for",
+		"if",
+		"else",
+		"switch",
+		"case",
+		"try",
+		"catch",
+		"void",
+		"while",
+		"with",
+		"return"
+	],
 	"requireSpaceBeforeObjectValues": true,
 	"requireSpaceBetweenArguments": true,
 	"requireSpacesInAnonymousFunctionExpression": {
@@ -84,7 +99,6 @@
 	"requireSpacesInNamedFunctionExpression": {
 		"beforeOpeningCurlyBrace": true
 	},
-	"requireYodaConditions": true,
 	"validateIndentation": "\t",
 	"validateLineBreaks": "LF",
 	"validateParameterSeparator": ", ",
