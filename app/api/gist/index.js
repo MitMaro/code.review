@@ -47,7 +47,7 @@ Gist.prototype._getBlobs = function getBlobs(commit) {
 				.then(function addBlobEntry(content) {
 					blobs[entry.sha()] = {
 						name: entry.path(),
-						content: content
+						content: content.toString("utf-8")
 					};
 				});
 			})
