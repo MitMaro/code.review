@@ -7,5 +7,9 @@ module.exports = function route(request, response) {
 	gist.blobs()
 		.then(function (blobs) {
 			response(blobs);
+		})
+		.catch(function (err) {
+			console.error(err);
+			response(err);
 		});
 };
