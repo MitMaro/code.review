@@ -14,4 +14,6 @@ server.route({
 	handler: require("./routes/root")
 });
 
-server.start();
+server.start(function () {
+	console.log("API running on port %s", server.info.port);
+});
