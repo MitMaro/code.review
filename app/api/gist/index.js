@@ -22,12 +22,13 @@ Gist.prototype._download = function _download() {
 	});
 };
 
+Gist.prototype._openLocalRepository = function _openLocalRepository() {
+	return NodeGit.Repository.open(this._path);
+};
+
 Gist.prototype._master = function _master() {
-	var self = this;
 	return this._download()
-		.catch(function openExistingRepo() {
-			return NodeGit.Repository.open(self._path);
-		})
+		.catch(this._openLocalRepository.bind(this))
 		.then(function getMasterCommit(repo) {
 			return repo.getReferenceCommit("master");
 		});
