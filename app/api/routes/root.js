@@ -3,10 +3,15 @@
 var Gist = require("../gist/index");
 
 module.exports = function route(request, response) {
-	var gist = new Gist(request.params.gistId);
+	var gistId = request.params.gistId;
+	var gist = new Gist(gistId);
 	gist.blobs()
 		.then(function (blobs) {
-			response(blobs);
+			response({
+				id: gistId,
+				links: {},
+				files: blobs
+			});
 		})
 		.catch(function (err) {
 			console.error(err);
