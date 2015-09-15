@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "scripts": {
+    "eslint": "eslint ."
+  },
+  "devDependencies": {
+    "babelify": "^6.3.0",
+    "browserify": "^11.0.1",
+    "del": "^2.0.2",
+    "envify": "^3.4.0",
+    "gulp": "^3.9.0",
+    "gulp-help": "^1.6.1",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "gulp-minify-css": "^1.2.1",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.0.4",
+    "gulp-size": "^2.0.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-template": "^3.0.0",
+    "gulp-util": "^3.0.6",
+    "gulp-watch": "^4.3.5",
+    "node-bourbon": "^4.2.3",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0",
+    "yargs": "^3.24.0"
+  },
+  "dependencies": {
+    "react": "^0.13.3"
+  }
+}
