@@ -29,7 +29,7 @@ var data = {
 		'build/**'
 	],
 	sass: {
-		pattern: './src/sass/CodeReview.sass',
+		pattern: './src/sass/CodeReview.scss',
 		output: 'code-review-'
 	},
 	statics: {
