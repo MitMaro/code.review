@@ -4,9 +4,11 @@
     "eslint": "eslint ."
   },
   "devDependencies": {
+    "async": "^1.4.2",
     "babelify": "^6.3.0",
     "browserify": "^11.0.1",
     "del": "^2.0.2",
+    "ecstatic": "^1.0.0",
     "envify": "^3.4.0",
     "gulp": "^3.9.0",
     "gulp-help": "^1.6.1",
