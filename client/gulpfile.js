@@ -1,6 +1,8 @@
 'use strict';
+var getHelpOptions = require('./gulp/helpers/getHelpOptions');
 var gulp = require('gulp-help')(require('gulp'));
 var plugins = require('gulp-load-plugins')();
+var async = require('async');
 
 var argv = require('yargs').argv;
 
@@ -39,7 +41,6 @@ var data = {
 	}
 };
 
-	
 function task(taskName) {
 	return require('./gulp/' + taskName)(gulp, plugins, options, data)
 }
@@ -47,31 +48,36 @@ function task(taskName) {
 gulp.task('clean', 'Remove all build files', [], task('clean'));
 
 gulp.task('html', 'Build the html files', ['clean'], task('html'), {
-	options: {
-		destination: 'Sets the destination folder for the build. Default: ./build'
-	}
+	options: getHelpOptions(['destination'])
 });
 
 gulp.task('sass', 'Compile the SASS files into css', ['clean'], task('sass'), {
-	options: {
-		watch: 'Causes a rebuild on file modification',
-		debug: 'Forces debug output of build',
-		destination: 'Sets the destination folder for the build. Default: ./build'
-	}
+	options: getHelpOptions(['watch', 'debug', 'destination'])
 });
 
 gulp.task('statics', 'Copy static files to build', ['clean'], task('statics'), {
-	options: {
-		watch: 'Causes a rebuild on file modification'
-	}
+	options: getHelpOptions(['watch'])
 });
 
 gulp.task('bundle', 'Create JavaScript bundles', ['clean'], task('bundle'), {
-	options: {
-		watch: 'Causes a rebuild on file modification',
-		debug: 'Forces debug output of build',
-		destination: 'Sets the destination folder for the build. Default: ./build'
-	}
+	options: getHelpOptions(['watch', 'debug', 'destination'])
 });
 
-gulp.task('build', 'Build the whole project', ['clean', 'bundle', 'html', 'sass', 'statics']);
+gulp.task('build', 'Build the whole project', ['clean', 'bundle', 'html', 'sass', 'statics'], null, {
+	options: getHelpOptions(['watch', 'debug', 'destination'])
+});
+
+gulp.task('server', 'Start the client development server', ['clean'], function(done) {
+		var tasks = [];
+		
+		tasks.push(task('bundle'));
+		tasks.push(task('html'));
+		tasks.push(task('sass'));
+		tasks.push(task('statics'));
+		tasks.push(task('server'));
+
+		async.parallel(tasks, done);
+	}, {
+		options: getHelpOptions(['watch', 'debug', 'destination', 'port'])
+	}
+);
