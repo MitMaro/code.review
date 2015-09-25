@@ -3,7 +3,7 @@ var getHelpOptions = require('./gulp/helpers/getHelpOptions');
 var gulp = require('gulp-help')(require('gulp'));
 var plugins = require('gulp-load-plugins')();
 var async = require('async');
-
+var pkg = require('./package.json');
 var argv = require('yargs').argv;
 
 var options = {
@@ -24,6 +24,9 @@ var data = {
 		patterns: './src/js/Index.jsx',
 		output: 'bundle-'
 	},
+	vendorBundle: {
+		output: 'vendor-bundle-'
+	},
 	htmlPatterns: [
 		'./src/html/index.html'
 	],
@@ -38,7 +41,8 @@ var data = {
 		patterns: [
 			'./src/images/**/*'
 		]
-	}
+	},
+	externals: Object.keys(pkg.dependencies)
 };
 
 function task(taskName) {
@@ -63,14 +67,19 @@ gulp.task('bundle', 'Create JavaScript bundles', ['clean'], task('bundle'), {
 	options: getHelpOptions(['watch', 'debug', 'destination'])
 });
 
-gulp.task('build', 'Build the whole project', ['clean', 'bundle', 'html', 'sass', 'statics'], null, {
+gulp.task('build', 'Build the whole project', ['clean', 'bundle', 'bundle:vendor', 'html', 'sass', 'statics'], null, {
 	options: getHelpOptions(['watch', 'debug', 'destination'])
+});
+
+gulp.task('bundle:vendor', 'Create a 3rd party library bundle', ['clean'], task('bundle-vendor'), {
+	options: getHelpOptions(['destination'])
 });
 
 gulp.task('server', 'Start the client development server', ['clean'], function(done) {
 		var tasks = [];
 		
 		tasks.push(task('bundle'));
+		tasks.push(task('bundle-vendor'));
 		tasks.push(task('html'));
 		tasks.push(task('sass'));
 		tasks.push(task('statics'));
