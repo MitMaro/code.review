@@ -2,14 +2,14 @@ var browserify = require('browserify');
 var babelify = require('babelify');
 var watchify = require('watchify');
 var envify = require('envify/custom');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var path = require('path');
+var buildBundle = require('./helpers/buildBundle');
 
 module.exports = function(gulp, plugins, options, data) {
+	var bundlePath = data.bundle.output + data.hash + '.js';
 	var envy = envify({
 		NODE_ENV: options.debug ? 'development' : 'production',
-		DEBUG: options.debug
+		DEBUG: options.debug,
+		global: true
 	});
 	var watchifyOptions;
 	var browserifyOptions = {
@@ -31,46 +31,16 @@ module.exports = function(gulp, plugins, options, data) {
 			data.bundle.patterns,
 			browserifyOptions
 		);
-
+		bundle.external(data.externals);
+		
 		if (options.watch) {
 			watch = watchify(bundle, watchifyOptions);
 			watch.on('update', function() {
-				buildBundle(bundle);
+				return buildBundle(gulp, bundle, bundlePath, plugins, options);
 			});
 			plugins.util.log('browserify: starting watch');
 		}
-
-		return buildBundle(bundle);
+		return buildBundle(gulp, bundle, bundlePath, plugins, options);
 	};
 
-	function buildBundle(bundle) {
-		plugins.util.log('browserify: building');
-
-		var stream = bundle.bundle()
-			.on('error', function(err) {
-				if (err.description) {
-					plugins.util.log(
-						err.name + ':' + err.description + 'on line' + err.lineNumber + 'in file' + err.fileName
-					);
-				}
-				else {
-					plugins.util.log(err.message);
-				}
-			})
-			.pipe(source(data.bundle.output + data.hash + '.js'))
-			.pipe(buffer())
-		;
-
-		if (!options.debug) {
-			stream = stream.pipe(plugins.uglify());
-		}
-
-		return stream
-			.pipe(plugins.size({showFiles: true}))
-			.pipe(gulp.dest(path.join(options.destination, 'js')))
-			.on('end', function() {
-				plugins.util.log('browserify: build complete');
-			})
-		;
-	}
 };
