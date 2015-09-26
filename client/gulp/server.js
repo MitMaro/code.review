@@ -1,12 +1,13 @@
-var http = require('http');
+'use strict';
+/* eslint-disable no-process-exit */
 
+var http = require('http');
 var ecstatic = require('ecstatic');
 
-
-module.exports = function(gulp, plugins, options, data) {
-	return function (done) {
+module.exports = function createServerTask(gulp, plugins, options) {
+	return function serverTask(done) {
 		var closeAttempt = false;
-		var server = http.createServer(
+		var httpServer = http.createServer(
 			ecstatic({
 				root: options.destination,
 				cache: 'no-cache'
@@ -15,28 +16,28 @@ module.exports = function(gulp, plugins, options, data) {
 
 		// this will hold the server open on shutdown if not
 		// set to a lower value
-		server.addListener("connection",function(stream) {
+		httpServer.addListener('connection', function serverConnection(stream) {
 			stream.setTimeout(1000);
 		});
 
-		server.on('close', function() {
+		httpServer.on('close', function serverClose() {
 			done();
 			process.exit(0);
 		});
 
-		server.listen(options.port);
+		httpServer.listen(options.port);
 
 		plugins.util.log('Server running on http://localhost:' + options.port + '/');
 		plugins.util.log('ctrl-c on any sane operation system to exit');
 
-		process.on('SIGINT', function() {
+		process.on('SIGINT', function sigint() {
 			if (closeAttempt) {
 				process.exit(1);
 			}
 			plugins.util.log('Shutting down server. Hit ctrl-c again to force');
 
-			server.close();
+			httpServer.close();
 			closeAttempt = true;
 		});
-	}
+	};
 };

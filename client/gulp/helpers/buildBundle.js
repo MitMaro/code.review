@@ -1,12 +1,15 @@
+'use strict';
+
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var path = require('path');
 
 module.exports = function buildBundle(gulp, bundle, outputPath, plugins, options) {
-	plugins.util.log('browserify: building ' + outputPath);
+	var stream;
 
-	var stream = bundle.bundle()
-		.on('error', function(err) {
+	plugins.util.log('browserify: building ' + outputPath);
+	stream = bundle.bundle()
+		.on('error', function bundleError(err) {
 			if (err.description) {
 				plugins.util.log(
 					err.name + ':' + err.description + 'on line' + err.lineNumber + 'in file' + err.fileName
@@ -27,7 +30,7 @@ module.exports = function buildBundle(gulp, bundle, outputPath, plugins, options
 	return stream
 		.pipe(plugins.size({showFiles: true}))
 		.pipe(gulp.dest(path.join(options.destination, 'js')))
-		.on('end', function() {
+		.on('end', function streamEnd() {
 			plugins.util.log('browserify: build complete ' + outputPath);
 		})
 	;

@@ -5,7 +5,8 @@
     "jscs": "jscs ."
   },
   "devDependencies": {
-    "eslint": "^0.18.0",
+    "eslint": "^1.5.0",
+    "eslint-plugin-react": "^3.4.2",
     "jscs": "^1.12.0"
   }
 }

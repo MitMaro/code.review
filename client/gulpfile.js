@@ -13,7 +13,7 @@ var options = {
 	port: argv.port || 8000,
 	production: argv.production || plugins.util.env.NODE_ENV === 'production',
 	debug: argv.debug || !(argv.production || plugins.util.env.NODE_ENV === 'production'),
-	bail: argv.bail,
+	bail: argv.bail
 };
 
 var data = {
@@ -46,7 +46,7 @@ var data = {
 };
 
 function task(taskName) {
-	return require('./gulp/' + taskName)(gulp, plugins, options, data)
+	return require('./gulp/' + taskName)(gulp, plugins, options, data);
 }
 
 gulp.task('clean', 'Remove all build files', [], task('clean'));
@@ -75,18 +75,19 @@ gulp.task('bundle:vendor', 'Create a 3rd party library bundle', ['clean'], task(
 	options: getHelpOptions(['destination'])
 });
 
-gulp.task('server', 'Start the client development server', ['clean'], function(done) {
-		var tasks = [];
-		
-		tasks.push(task('bundle'));
-		tasks.push(task('bundle-vendor'));
-		tasks.push(task('html'));
-		tasks.push(task('sass'));
-		tasks.push(task('statics'));
-		tasks.push(task('server'));
+gulp.task('server', 'Start the client development server', ['clean'], serverTask, {
+	options: getHelpOptions(['watch', 'debug', 'destination', 'port'])
+});
 
-		async.parallel(tasks, done);
-	}, {
-		options: getHelpOptions(['watch', 'debug', 'destination', 'port'])
-	}
-);
+function serverTask(done) {
+	var tasks = [
+		task('bundle'),
+		task('bundle-vendor'),
+		task('html'),
+		task('sass'),
+		task('statics'),
+		task('server')
+	];
+
+	async.parallel(tasks, done);
+}

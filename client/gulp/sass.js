@@ -1,11 +1,13 @@
+'use strict';
+
 var path = require('path');
 var nodeBourbon = require('node-bourbon');
 
-module.exports = function(gulp, plugins, options, data) {
-	return function() {
+module.exports = function createSassTask(gulp, plugins, options, data) {
+	return function sassTask() {
 		// if watching then update bundle as they change
 		if (options.watch) {
-			gulp.watch(data.sass.pattern, function() {
+			gulp.watch(data.sass.pattern, function watch() {
 				buildSass();
 			});
 			plugins.util.log('sass: starting watch');
@@ -14,8 +16,10 @@ module.exports = function(gulp, plugins, options, data) {
 	};
 
 	function buildSass() {
+		var stream;
+
 		plugins.util.log('sass: building');
-		var stream = gulp
+		stream = gulp
 			.src(data.sass.pattern)
 			.pipe(plugins.plumber())
 			.pipe(plugins.rename(data.sass.output + data.hash + '.css'))
@@ -42,10 +46,9 @@ module.exports = function(gulp, plugins, options, data) {
 		stream
 			.pipe(plugins.size({showFiles: true}))
 			.pipe(gulp.dest(path.join(options.destination, 'css')))
-			.on('end', function() {
+			.on('end', function end() {
 				plugins.util.log('sass: build complete');
 			})
 		;
 	}
-
 };
