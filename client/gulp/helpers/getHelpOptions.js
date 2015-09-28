@@ -1,3 +1,4 @@
+'use strict';
 
 var help = {
 	watch: 'Causes a rebuild on file modification',
@@ -7,7 +8,7 @@ var help = {
 };
 
 
-module.exports = function (keys) {
+module.exports = function getHelpOptions(keys) {
 	var i;
 	var options = {};
 

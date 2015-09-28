@@ -1,1 +1,2 @@
-console.log("Code Review Server");
+'use strict';
+console.log('Code Review Server');

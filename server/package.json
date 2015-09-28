@@ -1,10 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "eslint": "eslint ."
   },
   "devDependencies": {
+    "eslint": "^1.5.1"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
