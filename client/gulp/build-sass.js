@@ -2,9 +2,17 @@
 
 var path = require('path');
 var nodeBourbon = require('node-bourbon');
+var help = require('./helpers/help');
 
-module.exports = function createSassTask(gulp, plugins, options, data) {
-	return function sassTask() {
+help.registerTask(
+	'build:sass',
+	'Builds the Sass files and copies the files into the destination',
+	['clean'],
+	['destination', 'hash', 'watch', 'debug']
+);
+
+module.exports = function registerBuildSassTask(gulp, plugins, options, data) {
+	gulp.task('build:sass', ['clean'], function buildSassTask() {
 		// if watching then update bundle as they change
 		if (options.watch) {
 			gulp.watch(data.sass.pattern, function watch() {
@@ -13,7 +21,7 @@ module.exports = function createSassTask(gulp, plugins, options, data) {
 			plugins.util.log('sass: starting watch');
 		}
 		buildSass();
-	};
+	});
 
 	function buildSass() {
 		var stream;

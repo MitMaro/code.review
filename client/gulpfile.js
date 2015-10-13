@@ -1,23 +1,24 @@
 'use strict';
-var getHelpOptions = require('./gulp/helpers/getHelpOptions');
-var gulp = require('gulp-help')(require('gulp'));
+var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
-var async = require('async');
 var pkg = require('./package.json');
 var argv = require('yargs').argv;
+var help = require('./gulp/helpers/help');
 
 var options = {
-	watch: argv.watch,
+	command: argv._[0],
+	watch: argv.watch || false,
 	destination: argv.destination || './build',
-	coverage: argv.coverage,
+	noClean: !argv.clean,
+	coverage: argv.coverage || false,
 	port: argv.port || 8000,
 	production: argv.production || plugins.util.env.NODE_ENV === 'production',
 	debug: argv.debug || !(argv.production || plugins.util.env.NODE_ENV === 'production'),
-	bail: argv.bail
+	bail: argv.bail || false
 };
 
 var data = {
-	hash: (Math.floor(Math.random() * (1000000 - 100000)) + 100000).toString(),
+	hash: argv.hash || (Math.floor(Math.random() * (1000000 - 100000)) + 100000).toString(),
 	title: 'Code Review',
 	root: '/',
 	bundle: {
@@ -45,36 +46,46 @@ var data = {
 	externals: Object.keys(pkg.dependencies)
 };
 
-function task(taskName) {
-	return require('./gulp/' + taskName)(gulp, plugins, options, data);
+function loadTasks(taskNames) {
+	taskNames.forEach(function taskNameForEach(taskName) {
+		require('./gulp/' + taskName)(gulp, plugins, options, data);
+	});
 }
 
-gulp.task('clean', 'Remove all build files', [], task('clean'));
+help.registerArgument(
+	'clean', 'Force a clean before running task.', 'false'
+);
+help.registerArgument(
+	'debug', 'Forces a debug build.', 'false'
+);
+help.registerArgument(
+	'hash', 'Used as a unique in various places during the build.', 'random integer'
+);
+help.registerArgument(
+	'destination', 'The build files destination.', 'build'
+);
+help.registerArgument(
+	'watch', 'Watch files for changes and rebuild.', 'false'
+);
+help.registerArgument(
+	'port', 'The HTTP port to listen for connections.', '8000'
+);
 
-gulp.task('html', 'Build the html files', ['clean'], task('html'), {
-	options: getHelpOptions(['destination'])
-});
+loadTasks([
+	'help',
+	'clean',
+	'build-html',
+	'build-vendor-bundle',
+	'build-bundle',
+	'build-sass',
+	'build-statics',
+	'build',
+	'server'
+]);
 
-gulp.task('sass', 'Compile the SASS files into css', ['clean'], task('sass'), {
-	options: getHelpOptions(['watch', 'debug', 'destination'])
-});
+gulp.task('default', ['help']);
 
-gulp.task('statics', 'Copy static files to build', ['clean'], task('statics'), {
-	options: getHelpOptions(['watch'])
-});
-
-gulp.task('bundle', 'Create JavaScript bundles', ['clean'], task('bundle'), {
-	options: getHelpOptions(['watch', 'debug', 'destination'])
-});
-
-gulp.task('build', 'Build the whole project', ['clean', 'bundle', 'bundle:vendor', 'html', 'sass', 'statics'], null, {
-	options: getHelpOptions(['watch', 'debug', 'destination'])
-});
-
-gulp.task('bundle:vendor', 'Create a 3rd party library bundle', ['clean'], task('bundle-vendor'), {
-	options: getHelpOptions(['destination'])
-});
-
+/*
 gulp.task('server', 'Start the client development server', ['clean'], serverTask, {
 	options: getHelpOptions(['watch', 'debug', 'destination', 'port'])
 });
@@ -90,4 +101,4 @@ function serverTask(done) {
 	];
 
 	async.parallel(tasks, done);
-}
+*/

@@ -5,8 +5,16 @@ var babelify = require('babelify');
 var watchify = require('watchify');
 var envify = require('envify/custom');
 var buildBundle = require('./helpers/buildBundle');
+var help = require('./helpers/help');
 
-module.exports = function createBundleTask(gulp, plugins, options, data) {
+help.registerTask(
+	'build:bundle',
+	'Builds the JavaScript system and copies the files into the destination',
+	['clean'],
+	['destination', 'hash', 'watch', 'debug']
+);
+
+module.exports = function registerBundleTask(gulp, plugins, options, data) {
 	var bundlePath = data.bundle.output + data.hash + '.js';
 	var envy = envify({
 		NODE_ENV: options.debug ? 'development' : 'production',
@@ -28,7 +36,7 @@ module.exports = function createBundleTask(gulp, plugins, options, data) {
 		};
 	}
 
-	return function bundleTask() {
+	gulp.task('build:bundle', ['clean'], function bundleTask() {
 		var watch;
 		var bundle = browserify(
 			data.bundle.patterns,
@@ -45,5 +53,5 @@ module.exports = function createBundleTask(gulp, plugins, options, data) {
 			plugins.util.log('browserify: starting watch');
 		}
 		return buildBundle(gulp, bundle, bundlePath, plugins, options);
-	};
+	});
 };

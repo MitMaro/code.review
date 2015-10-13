@@ -3,9 +3,17 @@
 
 var http = require('http');
 var ecstatic = require('ecstatic');
+var help = require('./helpers/help');
+
+help.registerTask(
+	'server',
+	'Run an http server for the client side build',
+	['build'],
+	['port']
+);
 
 module.exports = function createServerTask(gulp, plugins, options) {
-	return function serverTask(done) {
+	gulp.task('server', ['build'], function serverTask(done) {
 		var closeAttempt = false;
 		var httpServer = http.createServer(
 			ecstatic({
@@ -39,5 +47,5 @@ module.exports = function createServerTask(gulp, plugins, options) {
 			httpServer.close();
 			closeAttempt = true;
 		});
-	};
+	});
 };
