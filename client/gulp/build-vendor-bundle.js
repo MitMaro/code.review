@@ -3,8 +3,16 @@
 var browserify = require('browserify');
 var envify = require('envify/custom');
 var buildBundle = require('./helpers/buildBundle');
+var help = require('./helpers/help');
 
-module.exports = function createBundleVendorTask(gulp, plugins, options, data) {
+help.registerTask(
+	'build:vendor-bundle',
+	'Builds the vendor JavaScript bundle',
+	['clean'],
+	['debug', 'destination', 'hash']
+);
+
+module.exports = function registerBundleVendorTask(gulp, plugins, options, data) {
 	var bundlePath = data.vendorBundle.output + data.hash + '.js';
 	var envy = envify({
 		NODE_ENV: options.debug ? 'development' : 'production',
@@ -16,7 +24,7 @@ module.exports = function createBundleVendorTask(gulp, plugins, options, data) {
 		transform: [envy]
 	};
 
-	return function bundleVendorTask() {
+	gulp.task('build:vendor-bundle', ['clean'], function bundleVendorTask() {
 		var bundle = browserify(
 			browserifyOptions
 		);
@@ -24,5 +32,5 @@ module.exports = function createBundleVendorTask(gulp, plugins, options, data) {
 		bundle.require(data.externals);
 
 		return buildBundle(gulp, bundle, bundlePath, plugins, options);
-	};
+	});
 };
